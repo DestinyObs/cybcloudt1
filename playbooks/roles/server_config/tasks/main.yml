@@ -1,0 +1,31 @@
+---
+# Server configuration tasks
+- name: Set hostname
+  hostname:
+    name: "{{ server_hostname }}"
+    
+- name: Update /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    line: "{{ server_ip }} {{ server_hostname }}"
+    
+- name: Update system packages
+  dnf:
+    name: "*"
+    state: latest
+    
+- name: Install basic packages
+  dnf:
+    name: "{{ basic_packages }}"
+    state: present
+    
+- name: Configure SELinux
+  selinux:
+    policy: targeted
+    state: enforcing
+    
+- name: Start and enable firewall
+  systemd:
+    name: firewalld
+    state: started
+    enabled: yes

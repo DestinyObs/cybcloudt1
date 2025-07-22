@@ -1,0 +1,12 @@
+---
+# Default variables for server configuration role
+server_hostname: "gitlabce.local"
+server_ip: "10.10.10.7"
+
+basic_packages:
+  - vim
+  - wget
+  - curl
+  - git
+  - htop
+  - net-tools

@@ -1,0 +1,27 @@
+---
+# Global variables for all hosts
+gitlab_external_url: "http://10.10.10.7"
+server_hostname: "gitlabce.local"
+server_ip: "10.10.10.7"
+
+# Server configuration
+basic_packages:
+  - vim
+  - wget
+  - curl
+  - git
+  - htop
+  - net-tools
+
+# GitLab configuration
+gitlab_dependencies:
+  - curl
+  - policycoreutils
+  - openssh-server
+  - perl
+  - postfix
+
+firewall_services:
+  - http
+  - https
+  - ssh

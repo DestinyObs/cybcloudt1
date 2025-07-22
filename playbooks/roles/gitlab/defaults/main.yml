@@ -1,0 +1,15 @@
+---
+# Default variables for GitLab role
+gitlab_external_url: "http://10.10.10.7"
+
+gitlab_dependencies:
+  - curl
+  - policycoreutils
+  - openssh-server
+  - perl
+  - postfix
+
+firewall_services:
+  - http
+  - https
+  - ssh

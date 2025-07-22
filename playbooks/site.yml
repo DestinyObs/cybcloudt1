@@ -1,0 +1,8 @@
+---
+# Main playbook for GitLab deployment
+- name: Deploy GitLab on RHEL9
+  hosts: localhost
+  become: yes
+  roles:
+    - server_config
+    - gitlab

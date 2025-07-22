@@ -1,0 +1,53 @@
+---
+# GitLab installation and configuration tasks
+- name: Install GitLab dependencies
+  dnf:
+    name: "{{ gitlab_dependencies }}"
+    state: present
+    
+- name: Start and enable SSH
+  systemd:
+    name: sshd
+    state: started
+    enabled: yes
+    
+- name: Start and enable Postfix
+  systemd:
+    name: postfix
+    state: started
+    enabled: yes
+    
+- name: Configure firewall for GitLab
+  firewalld:
+    service: "{{ item }}"
+    permanent: yes
+    state: enabled
+    immediate: yes
+  loop: "{{ firewall_services }}"
+  
+- name: Add GitLab repository
+  shell: curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
+  args:
+    creates: /etc/yum.repos.d/gitlab_gitlab-ce.repo
+    
+- name: Install GitLab CE
+  dnf:
+    name: gitlab-ce
+    state: present
+  environment:
+    EXTERNAL_URL: "{{ gitlab_external_url }}"
+    
+- name: Reconfigure GitLab
+  command: gitlab-ctl reconfigure
+  
+- name: Start GitLab
+  command: gitlab-ctl start
+  
+- name: Display GitLab access information
+  debug:
+    msg:
+      - "GitLab installation completed successfully"
+      - "Access URL: {{ gitlab_external_url }}"
+      - "Username: root"
+      - "Password: Check /etc/gitlab/initial_root_password"
+      - "Change the root password immediately after first login"
