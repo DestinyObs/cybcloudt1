@@ -1,25 +1,14 @@
 #!/bin/bash
 
-# Simple Ansible installation script for RHEL 8.6
-# Run as root or with sudo
+echo "Installing Ansible on Red Hat-based system..."
 
-# Update system
-yum update -y
-
-# Install EPEL repository
-yum install -y epel-release
-
-# Install Python3 and pip
-yum install -y python3 python3-pip
+# Ensure EPEL repo is enabled (Extra Packages for Enterprise Linux)
+sudo yum install -y epel-release
 
 # Install Ansible
-pip3 install ansible
-
-# Install additional collections
-ansible-galaxy collection install community.general
-ansible-galaxy collection install ansible.posix
+sudo yum install -y ansible
 
 # Verify installation
 ansible --version
 
-echo "Ansible installation completed"
+echo "Ansible installation complete."
