@@ -10,12 +10,12 @@
     line: "{{ server_ip }} {{ server_hostname }}"
     
 - name: Update system packages
-  dnf:
+  yum:
     name: "*"
     state: latest
     
 - name: Install basic packages
-  dnf:
+  yum:
     name: "{{ basic_packages }}"
     state: present
     

@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# Simple Ansible installation script for RHEL9
+# Simple Ansible installation script for RHEL 8.6
 # Run as root or with sudo
 
 # Update system
-dnf update -y
+yum update -y
 
 # Install EPEL repository
-dnf install -y epel-release
+yum install -y epel-release
 
 # Install Python3 and pip
-dnf install -y python3 python3-pip
+yum install -y python3 python3-pip
 
 # Install Ansible
 pip3 install ansible

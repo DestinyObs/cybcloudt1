@@ -1,7 +1,7 @@
 ---
 # GitLab installation and configuration tasks
 - name: Install GitLab dependencies
-  dnf:
+  yum:
     name: "{{ gitlab_dependencies }}"
     state: present
     
@@ -31,7 +31,7 @@
     creates: /etc/yum.repos.d/gitlab_gitlab-ce.repo
     
 - name: Install GitLab CE
-  dnf:
+  yum:
     name: gitlab-ce
     state: present
   environment:

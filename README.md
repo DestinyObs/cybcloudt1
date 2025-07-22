@@ -1,13 +1,13 @@
-# CyberCloud Technical - RHEL8 GitLab Deployment Project
+# CyberCloud Technical - RHEL 8.6 GitLab Deployment Project
 
 ## Project Overview
-CyberAcademy internship project to deploy a RHEL9 server with GitLab-CE and develop automation playbooks.
+CyberAcademy internship project to deploy a RHEL 8.6 server with GitLab-CE and develop automation playbooks.
 
-### RHEL8 Server Requirements
+### RHEL 8.6 Server Requirements
 - **CPU:** 2 vCPU
 - **RAM:** 4GB
-- **Storage:** 100GB
-- **OS:** Red Hat Enterprise Linux 9
+- **Storage:** 128GB
+- **OS:** Red Hat Enterprise Linux 8.6
 - **Hostname:** gitlabce.local
 - **IP Address:** 10.10.10.7
 
@@ -46,9 +46,9 @@ ansible-playbook site.yml
 
 ### Install Ansible
 ```bash
-sudo dnf update -y
-sudo dnf install -y epel-release
-sudo dnf install -y python3 python3-pip
+sudo yum update -y
+sudo yum install -y epel-release
+sudo yum install -y python3 python3-pip
 pip3 install ansible
 ansible-galaxy collection install community.general ansible.posix community.crypto
 ```
@@ -57,21 +57,21 @@ ansible-galaxy collection install community.general ansible.posix community.cryp
 ```bash
 sudo hostnamectl set-hostname gitlabce.local
 echo "10.10.10.7 gitlabce.local" | sudo tee -a /etc/hosts
-sudo dnf update -y
-sudo dnf install -y vim wget curl git htop net-tools
+sudo yum update -y
+sudo yum install -y vim wget curl git htop net-tools
 sudo systemctl start firewalld
 sudo systemctl enable firewalld
 ```
 
 ### Install GitLab
 ```bash
-sudo dnf install -y curl policycoreutils openssh-server perl postfix
+sudo yum install -y curl policycoreutils openssh-server perl postfix
 sudo systemctl start sshd && sudo systemctl enable sshd
 sudo systemctl start postfix && sudo systemctl enable postfix
 sudo firewall-cmd --permanent --add-service={http,https,ssh}
 sudo firewall-cmd --reload
 curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
-sudo EXTERNAL_URL="http://10.10.10.7" dnf install -y gitlab-ce
+sudo EXTERNAL_URL="http://10.10.10.7" yum install -y gitlab-ce
 sudo gitlab-ctl reconfigure
 sudo gitlab-ctl start
 ```
