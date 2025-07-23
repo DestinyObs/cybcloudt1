@@ -4,9 +4,12 @@
 
 echo "Starting GitLab deployment on RHEL 8..."
 
+# Navigate to ansible-config directory (parent of scripts)
+cd "$(dirname "$0")/.."
+
 # Check if we're in the right directory
 if [ ! -f "site.yml" ]; then
-    echo "Error: site.yml not found. Make sure you're in the ansible-config directory."
+    echo "Error: site.yml not found. Make sure the ansible-config structure is correct."
     exit 1
 fi
 

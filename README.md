@@ -28,9 +28,9 @@ CyberAcademy internship project to deploy a RHEL 8.6 server with GitLab-CE and d
 ### GitLab Installation (Tasks 1 & 2)
 ```bash
 cd ansible-config/
-chmod +x install-ansible.sh run-deployment.sh
-sudo ./install-ansible.sh
-./run-deployment.sh
+chmod +x scripts/install-ansible.sh scripts/run-deployment.sh
+sudo scripts/install-ansible.sh
+scripts/run-deployment.sh
 ```
 
 ### VM Automation (Task 3)
@@ -99,7 +99,9 @@ The third requirement is **dynamic VM deployment automation**:
 cybcloudt1/
 ├── ansible-config/          # GitLab installation (COMPLETE)
 │   ├── site.yml
-│   ├── run-deployment.sh
+│   ├── scripts/
+│   │   ├── run-deployment.sh
+│   │   └── install-ansible.sh
 │   └── roles/
 ├── vm-automation/           # VM deployment automation (NEW)
 │   ├── playbooks/

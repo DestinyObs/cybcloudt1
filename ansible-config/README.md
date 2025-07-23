@@ -9,8 +9,9 @@ ansible-config/
 ├── ansible.cfg              # Ansible configuration
 ├── requirements.yml          # Required collections
 ├── site.yml                 # Main deployment playbook
-├── run-deployment.sh        # Deployment script
-├── install-ansible.sh       # Ansible installation script
+├── scripts/
+│   ├── run-deployment.sh    # Deployment script
+│   └── install-ansible.sh   # Ansible installation script
 ├── inventory/
 │   └── hosts.yml            # Host inventory
 ├── group_vars/
@@ -33,16 +34,16 @@ ansible-config/
 
 ### Method 1: One-Command Deployment
 ```bash
-chmod +x install-ansible.sh run-deployment.sh
-sudo ./install-ansible.sh
-./run-deployment.sh
+chmod +x scripts/install-ansible.sh scripts/run-deployment.sh
+sudo scripts/install-ansible.sh
+scripts/run-deployment.sh
 ```
 
 ### Method 2: Step by Step
 ```bash
 # Install Ansible
-chmod +x install-ansible.sh
-sudo ./install-ansible.sh
+chmod +x scripts/install-ansible.sh
+sudo scripts/install-ansible.sh
 
 # Install collections
 ansible-galaxy collection install -r requirements.yml
