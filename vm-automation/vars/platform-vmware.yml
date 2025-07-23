@@ -1,0 +1,73 @@
+---
+# Platform-specific configuration for VMware vCloud Director
+
+# VMware vCloud Director settings
+vcloud_api_url: "https://portal.cybercloud.net.ng/api"
+vcd_org: "cybercloud-org"
+vcd_vdc: "ceph-Management-Cluster"
+vcd_catalog: "CyberCloud-Templates"
+
+# Authentication (these should be in vault in production)
+vcloud_username: "{{ vault_vcloud_username | default('admin') }}"
+vcloud_password: "{{ vault_vcloud_password | default('password') }}"
+vcloud_token: "{{ vault_vcloud_token | default('') }}"
+
+# VM Templates mapping
+os_template_map:
+  rhel9: "RHEL-9-Template"
+  rhel8: "RHEL-8-Template"
+  centos8: "CentOS-8-Stream-Template"
+  ubuntu20: "Ubuntu-20.04-Template"
+  ubuntu22: "Ubuntu-22.04-Template"
+  windows2019: "Windows-Server-2019-Template"
+  windows2022: "Windows-Server-2022-Template"
+
+# Network mappings
+network_map:
+  default: "default-network"
+  dmz: "dmz-network"
+  internal: "internal-network"
+
+# Storage profiles
+storage_profiles:
+  standard: "Standard-Storage"
+  ssd: "SSD-Storage"
+  backup: "Backup-Storage"
+
+# VM sizing templates
+vm_sizes:
+  small:
+    cpu: 1
+    memory: 2048
+    disk: 30
+  medium:
+    cpu: 2
+    memory: 4096
+    disk: 50
+  large:
+    cpu: 4
+    memory: 8192
+    disk: 100
+  xlarge:
+    cpu: 8
+    memory: 16384
+    disk: 200
+
+# Default VM settings for VMware
+vmware_defaults:
+  power_on: true
+  guest_customization: true
+  tools_upgrade_policy: "manual"
+  hardware_version: "vmx-19"
+  
+# Network adapter settings
+network_adapter:
+  type: "VMXNET3"
+  connected: true
+  start_connected: true
+
+# Cloud-init settings
+cloud_init:
+  enabled: true
+  user_data_template: "cloud-init-userdata.yml"
+  meta_data_template: "cloud-init-metadata.yml"

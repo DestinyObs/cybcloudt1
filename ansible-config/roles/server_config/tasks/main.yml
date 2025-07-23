@@ -8,21 +8,29 @@
   lineinfile:
     path: /etc/hosts
     line: "{{ server_ip }} {{ server_hostname }}"
+    state: present
+    
+- name: Install EPEL repository
+  yum:
+    name: epel-release
+    state: present
+  ignore_errors: yes
     
 - name: Update system packages
   yum:
     name: "*"
     state: latest
+    update_cache: yes
     
 - name: Install basic packages
   yum:
     name: "{{ basic_packages }}"
     state: present
     
-- name: Configure SELinux
+- name: Configure SELinux to permissive (for GitLab compatibility)
   selinux:
     policy: targeted
-    state: enforcing
+    state: permissive
     
 - name: Start and enable firewall
   systemd:

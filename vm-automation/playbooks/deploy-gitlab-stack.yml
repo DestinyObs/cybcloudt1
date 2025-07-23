@@ -1,0 +1,65 @@
+---
+# Deploy complete GitLab infrastructure stack
+# Includes GitLab server, database, and monitoring
+
+- name: Deploy GitLab Infrastructure Stack
+  hosts: localhost
+  gather_facts: false
+  vars:
+    stack_name: "{{ stack_name | default('gitlab-stack') }}"
+    environment: "{{ environment | default('production') }}"
+    gitlab_cpu: "{{ gitlab_cpu | default(4) }}"
+    gitlab_memory: "{{ gitlab_memory | default(8192) }}"
+    gitlab_disk: "{{ gitlab_disk | default(100) }}"
+    db_cpu: "{{ db_cpu | default(2) }}"
+    db_memory: "{{ db_memory | default(4096) }}"
+    db_disk: "{{ db_disk | default(50) }}"
+    
+  tasks:
+    - name: Deploy GitLab Server
+      include: deploy-vm.yml
+      vars:
+        vm_name: "{{ stack_name }}-gitlab"
+        vm_os: "rhel9"
+        vm_cpu: "{{ gitlab_cpu }}"
+        vm_memory: "{{ gitlab_memory }}"
+        vm_disk: "{{ gitlab_disk }}"
+        vm_environment: "{{ environment }}"
+
+    - name: Deploy Database Server
+      include: deploy-vm.yml
+      vars:
+        vm_name: "{{ stack_name }}-db"
+        vm_os: "rhel9"
+        vm_cpu: "{{ db_cpu }}"
+        vm_memory: "{{ db_memory }}"
+        vm_disk: "{{ db_disk }}"
+        vm_environment: "{{ environment }}"
+
+    - name: Deploy Monitoring Server
+      include: deploy-vm.yml
+      vars:
+        vm_name: "{{ stack_name }}-monitor"
+        vm_os: "rhel9"
+        vm_cpu: 2
+        vm_memory: 2048
+        vm_disk: 30
+        vm_environment: "{{ environment }}"
+
+- name: Configure GitLab Stack
+  hosts: "{{ stack_name }}-gitlab"
+  become: yes
+  roles:
+    - ../roles/gitlab-server
+
+- name: Configure Database Server
+  hosts: "{{ stack_name }}-db"
+  become: yes
+  roles:
+    - ../roles/database-server
+
+- name: Configure Monitoring
+  hosts: "{{ stack_name }}-monitor"
+  become: yes
+  roles:
+    - ../roles/monitoring-server

@@ -1,0 +1,84 @@
+---
+# VM template definitions for different environments
+
+development:
+  vms:
+    web_server:
+      cpu: 1
+      memory: 2048
+      disk: 30
+      os: "rhel9"
+    database:
+      cpu: 2
+      memory: 4096
+      disk: 50
+      os: "rhel9"
+
+staging:
+  vms:
+    web_server:
+      cpu: 2
+      memory: 4096
+      disk: 50
+      os: "rhel9"
+    database:
+      cpu: 2
+      memory: 4096
+      disk: 100
+      os: "rhel9"
+    load_balancer:
+      cpu: 1
+      memory: 2048
+      disk: 30
+      os: "rhel9"
+
+production:
+  vms:
+    web_server:
+      cpu: 4
+      memory: 8192
+      disk: 100
+      os: "rhel9"
+    database:
+      cpu: 4
+      memory: 8192
+      disk: 200
+      os: "rhel9"
+    load_balancer:
+      cpu: 2
+      memory: 4096
+      disk: 50
+      os: "rhel9"
+    monitoring:
+      cpu: 2
+      memory: 4096
+      disk: 100
+      os: "rhel9"
+
+# Application-specific templates
+applications:
+  gitlab:
+    server:
+      cpu: 4
+      memory: 8192
+      disk: 100
+      os: "rhel9"
+    database:
+      cpu: 2
+      memory: 4096
+      disk: 100
+      os: "rhel9"
+  
+  web_farm:
+    web_server:
+      cpu: 2
+      memory: 4096
+      disk: 50
+      os: "rhel9"
+      count: 3
+    load_balancer:
+      cpu: 2
+      memory: 2048
+      disk: 30
+      os: "rhel9"
+      count: 1

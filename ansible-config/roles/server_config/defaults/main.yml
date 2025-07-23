@@ -8,5 +8,7 @@ basic_packages:
   - wget
   - curl
   - git
-  - htop
   - net-tools
+  - bind-utils
+  - tar
+  - unzip

@@ -25,21 +25,18 @@ CyberAcademy internship project to deploy a RHEL 8.6 server with GitLab-CE and d
 
 ## Quick Deployment
 
-### Method 1: Using Script
+### GitLab Installation (Tasks 1 & 2)
 ```bash
-chmod +x ../scripts/install-ansible.sh
-sudo ../scripts/install-ansible.sh
-chmod +x ../scripts/run-deployment.sh
-../scripts/run-deployment.sh
+cd ansible-config/
+chmod +x install-ansible.sh run-deployment.sh
+sudo ./install-ansible.sh
+./run-deployment.sh
 ```
 
-### Method 2: Manual Ansible
+### VM Automation (Task 3)
 ```bash
-# Install collections
-ansible-galaxy collection install -r requirements.yml
-
-# Run deployment
-ansible-playbook site.yml
+cd vm-automation/
+ansible-playbook playbooks/deploy-vm.yml -e vm_name=test-server
 ```
 
 ## Manual Installation Commands
@@ -83,6 +80,39 @@ sudo cat /etc/gitlab/initial_root_password
 - **URL:** http://10.10.10.7
 - **Username:** root
 - **Password:** From file above
+
+## Project Status
+
+### ✅ Tasks Completed
+1. **RHEL 8.6 Server Deployment** - Server deployed with exact specifications
+2. **GitLab-CE Installation** - Automated playbooks ready and tested
+
+### 🚧 Task 3: VM Deployment Automation
+The third requirement is **dynamic VM deployment automation**:
+- **Location:** `vm-automation/` folder
+- **Purpose:** Create new VMs automatically on CyberCloud platform
+- **Features:** Multi-OS support, scalable resources, reusable templates
+- **Integration:** VMware vCloud Director API integration
+
+### 📋 Project Structure
+```
+cybcloudt1/
+├── ansible-config/          # GitLab installation (COMPLETE)
+│   ├── site.yml
+│   ├── run-deployment.sh
+│   └── roles/
+├── vm-automation/           # VM deployment automation (NEW)
+│   ├── playbooks/
+│   └── templates/
+└── docs/                   # Project documentation
+```
+
+### 🎯 Final Deliverable
+Complete automation framework supporting:
+- Single VM deployment
+- Multi-VM application stacks
+- Environment-specific configurations
+- Dynamic resource scaling
 
 ## Troubleshooting
 ```bash

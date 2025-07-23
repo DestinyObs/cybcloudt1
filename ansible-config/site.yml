@@ -1,6 +1,6 @@
 ---
 # Main playbook for GitLab deployment
-- name: Deploy GitLab on RHEL9
+- name: Deploy GitLab on RHEL8
   hosts: localhost
   become: yes
   roles:

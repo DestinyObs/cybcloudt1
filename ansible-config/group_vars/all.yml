@@ -10,16 +10,20 @@ basic_packages:
   - wget
   - curl
   - git
-  - htop
   - net-tools
+  - bind-utils
+  - tar
+  - unzip
 
 # GitLab configuration
 gitlab_dependencies:
   - curl
   - policycoreutils
+  - policycoreutils-python-utils
   - openssh-server
   - perl
   - postfix
+  - tzdata
 
 firewall_services:
   - http

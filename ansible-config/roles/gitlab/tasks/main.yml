@@ -4,6 +4,7 @@
   yum:
     name: "{{ gitlab_dependencies }}"
     state: present
+    update_cache: yes
     
 - name: Start and enable SSH
   systemd:
@@ -24,23 +25,31 @@
     state: enabled
     immediate: yes
   loop: "{{ firewall_services }}"
+  ignore_errors: yes
+  
+- name: Check if GitLab repository exists
+  stat:
+    path: /etc/yum.repos.d/gitlab_gitlab-ce.repo
+  register: gitlab_repo
   
 - name: Add GitLab repository
   shell: curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | bash
-  args:
-    creates: /etc/yum.repos.d/gitlab_gitlab-ce.repo
-    
+  when: not gitlab_repo.stat.exists
+  
 - name: Install GitLab CE
   yum:
     name: gitlab-ce
     state: present
+    update_cache: yes
   environment:
     EXTERNAL_URL: "{{ gitlab_external_url }}"
+  register: gitlab_install
     
 - name: Reconfigure GitLab
   command: gitlab-ctl reconfigure
+  when: gitlab_install.changed
   
-- name: Start GitLab
+- name: Start GitLab services
   command: gitlab-ctl start
   
 - name: Display GitLab access information

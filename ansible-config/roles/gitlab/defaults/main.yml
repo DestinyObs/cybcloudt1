@@ -5,9 +5,11 @@ gitlab_external_url: "http://10.10.10.7"
 gitlab_dependencies:
   - curl
   - policycoreutils
+  - policycoreutils-python-utils
   - openssh-server
   - perl
   - postfix
+  - tzdata
 
 firewall_services:
   - http
