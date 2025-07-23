@@ -10,12 +10,6 @@
     line: "{{ server_ip }} {{ server_hostname }}"
     state: present
     
-- name: Install EPEL repository
-  yum:
-    name: epel-release
-    state: present
-  ignore_errors: yes
-    
 - name: Update system packages
   yum:
     name: "*"
