@@ -1,52 +1,60 @@
-# CyberCloud VM Deployment Automation
-
-## Overview
-Dynamic Ansible playbooks for automated VM deployment on CyberCloud platform.
+# CyberCloud VM Automation
 
 ## Purpose
-This automation framework allows for:
-- Dynamic VM creation on cloud platform
-- Multi-OS support (RHEL, CentOS, Ubuntu, Windows)
-- Scalable resource allocation
-- Reusable deployment templates
-- Application-specific configurations
+Ansible playbook to automate VM creation on CyberCloud platform.
 
-## Structure
-```
-vm-automation/
-├── README.md
-├── playbooks/
-│   ├── deploy-vm.yml              # Main VM deployment
-│   ├── deploy-web-server.yml      # Web server deployment
-│   ├── deploy-database.yml        # Database server deployment
-│   └── deploy-gitlab-stack.yml    # Complete GitLab stack
-├── roles/
-│   ├── vm-create/                 # VM creation role
-│   ├── os-config/                 # OS configuration
-│   ├── app-install/               # Application installation
-│   └── monitoring/                # Monitoring setup
-├── inventory/
-│   ├── vm-templates.yml           # VM template definitions
-│   └── environments/              # Environment-specific configs
-├── templates/
-│   ├── vm-specs/                  # VM specification templates
-│   └── cloud-init/                # Cloud-init configurations
-└── vars/
-    ├── vm-defaults.yml            # Default VM settings
-    └── platform-config.yml       # Platform-specific settings
-```
+## VM Types Supported
+- **rhel** - Red Hat Enterprise Linux 8 (2 CPU, 4GB RAM)
+- **ubuntu** - Ubuntu 20.04 Server (2 CPU, 4GB RAM) 
+- **windows** - Windows Server 2019 (4 CPU, 8GB RAM)
 
-## Quick Start
+All VMs use CephLAN network with DHCP for automatic IP assignment.
 
-### Deploy Single VM
+## Setup
+
+1. Transfer this folder to your RHEL VM (10.10.10.7):
 ```bash
-ansible-playbook playbooks/deploy-vm.yml \
-  -e vm_name=web-server-01 \
-  -e vm_os=rhel9 \
-  -e vm_cpu=2 \
-  -e vm_memory=4096 \
-  -e vm_disk=50
+scp -r vm-automation root@10.10.10.7:/root/
 ```
+
+2. SSH to RHEL VM and setup:
+```bash
+ssh root@10.10.10.7
+cd vm-automation/scripts
+chmod +x setup.sh
+./setup.sh
+```
+
+## Usage
+
+Create VMs using the playbook:
+
+```bash
+# Create RHEL VM
+ansible-playbook playbooks/create-vm.yml \
+  -e vm_name=my-rhel-vm \
+  -e vm_type=rhel \
+  -e cybercloud_password=YOUR_PASSWORD
+
+# Create Ubuntu VM  
+ansible-playbook playbooks/create-vm.yml \
+  -e vm_name=my-ubuntu-vm \
+  -e vm_type=ubuntu \
+  -e cybercloud_password=YOUR_PASSWORD
+
+# Create Windows VM
+ansible-playbook playbooks/create-vm.yml \
+  -e vm_name=my-windows-vm \
+  -e vm_type=windows \
+  -e cybercloud_password=YOUR_PASSWORD
+```
+
+## Files
+- `playbooks/create-vm.yml` - Main Ansible playbook
+- `scripts/selenium/create_vm.py` - Python script for web automation
+- `scripts/setup.sh` - Setup script for RHEL VM
+
+That's it. Simple VM creation automation for CyberCloud platform.
 
 ### Deploy Application Stack
 ```bash

@@ -1,0 +1,49 @@
+---
+# Simple VM Creation Playbook
+# Purpose: Create VMs on CyberCloud platform using Selenium automation
+# Usage: ansible-playbook create-vm.yml -e vm_name=test-vm -e vm_type=rhel
+
+- name: Create VM on CyberCloud Platform
+  hosts: localhost
+  gather_facts: false
+  
+  vars:
+    # VM specifications
+    vm_name: "{{ vm_name | default('test-vm') }}"
+    vm_type: "{{ vm_type | default('rhel') }}"
+    
+    # CyberCloud credentials
+    username: "joshua-azi"
+    password: "{{ cybercloud_password }}"
+    
+  tasks:
+    - name: Check required password
+      fail:
+        msg: "Password required: -e cybercloud_password=YOUR_PASSWORD"
+      when: cybercloud_password is not defined
+    
+    - name: Display VM creation plan
+      debug:
+        msg:
+          - "Creating VM: {{ vm_name }}"
+          - "Type: {{ vm_type }}"
+          - "Network: CephLAN (DHCP)"
+    
+    - name: Create VM using Selenium script
+      command: >
+        python3 scripts/selenium/create_vm.py 
+        "{{ username }}" 
+        "{{ password }}" 
+        "{{ vm_name }}" 
+        "{{ vm_type }}"
+      register: vm_result
+      args:
+        chdir: "{{ playbook_dir }}"
+    
+    - name: Show VM creation result
+      debug:
+        var: vm_result.stdout_lines
+    
+    - name: VM creation completed
+      debug:
+        msg: "VM {{ vm_name }} creation initiated successfully"
