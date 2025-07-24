@@ -31,8 +31,8 @@
     
     - name: Create VM using Selenium script
       shell: |
-        cd /root/vm-automation
-        python3 scripts/selenium/create_vm.py "{{ username }}" "{{ password }}" "{{ vm_name }}" "{{ vm_type }}"
+        cd /root/cybcloudt1/vm-automation
+        python3 scripts/create_vm.py "{{ username }}" "{{ password }}" "{{ vm_name }}" "{{ vm_type }}"
       register: vm_result
     
     - name: Show VM creation result
