@@ -30,15 +30,10 @@
           - "Network: CephLAN (DHCP)"
     
     - name: Create VM using Selenium script
-      command: >
-        python3 scripts/selenium/create_vm.py 
-        "{{ username }}" 
-        "{{ password }}" 
-        "{{ vm_name }}" 
-        "{{ vm_type }}"
+      shell: |
+        cd /root/vm-automation
+        python3 scripts/selenium/create_vm.py "{{ username }}" "{{ password }}" "{{ vm_name }}" "{{ vm_type }}"
       register: vm_result
-      args:
-        chdir: "{{ playbook_dir }}"
     
     - name: Show VM creation result
       debug:
