@@ -1,0 +1,19 @@
+# CyberCloud VM Automation
+# Production system for customer VM provisioning
+---
+- name: CyberCloud VM Provisioning
+  hosts: localhost
+  vars:
+    ansible_python_interpreter: "/venv/vm/bin/python"
+  environment:
+    env_user: "{{ lookup('env', 'CYBERCLOUD_USER') }}"
+    env_password: "{{ lookup('env', 'CYBERCLOUD_PASSWORD') }}"
+    env_host: "{{ lookup('env', 'CYBERCLOUD_HOST') }}"
+    env_org: "{{ lookup('env', 'CYBERCLOUD_ORG') }}"
+    env_api_version: 30.0
+    env_verify_ssl_certs: true
+  roles:
+      - catalogs
+      - catalog_item
+      - vapp
+      - vappvm

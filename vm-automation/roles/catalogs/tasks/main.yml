@@ -1,0 +1,14 @@
+# CyberCloud Catalog Management
+# Verify catalog availability for VM templates
+---
+- name: Check catalog availability
+  vcd_catalog:
+    catalog_name: "{{ catalog_name | default('Public Catalog') }}"
+    operation: "read"
+  register: catalog_check
+  ignore_errors: true
+
+- name: Catalog verification
+  debug:
+    msg: "Catalog {{ catalog_name | default('Public Catalog') }} is available"
+  when: catalog_check is succeeded

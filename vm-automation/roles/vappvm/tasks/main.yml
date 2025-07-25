@@ -1,0 +1,32 @@
+# CyberCloud VM Creation Tasks
+# Production VM provisioning for customer requests
+---
+- name: Create VM from template
+  vcd_vapp_vm:
+    target_vm_name: "{{ vm_name }}"
+    target_vapp: "{{ vapp_name }}"
+    source_vdc: "{{ vdc_name }}"
+    target_vdc: "{{ vdc_name }}"
+    source_catalog_name: "{{ catalog_name | default('Public Catalog') }}"
+    source_template_name: "{{ vm_template.template_name }}"
+    hostname: "{{ vm_name }}"
+    ip_allocation_mode: "{{ network_ip_allocation_mode }}"
+    network: "{{ network_name }}"
+    memory: "{{ vm_memory }}"
+    virtual_cpus: "{{ vm_cpu }}"
+    cores_per_socket: "{{ vm_cores_per_socket }}"
+    state: "present"
+    power_on: true
+    all_eulas_accepted: true
+  register: vm_creation_result
+
+- name: VM provisioning completed
+  debug:
+    msg: 
+      - "VM Name: {{ vm_name }}"
+      - "Template: {{ vm_template.template_name }}"
+      - "Memory: {{ vm_memory }}MB"
+      - "CPUs: {{ vm_cpu }}"
+      - "Network: {{ network_name }}"
+      - "Status: Ready"
+

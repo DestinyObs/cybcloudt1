@@ -1,0 +1,37 @@
+# CyberCloud VM Creation Defaults
+# Production system for customer VM provisioning
+---
+# VM Configuration
+vm_name: "{{ vm_type | default('rhel') }}-vm-{{ ansible_date_time.epoch }}"
+vm_description: "VM created via CyberCloud automation"
+vm_memory: "{{ requested_memory | default(2048) }}"
+vm_cpu: "{{ requested_cpu | default(2) }}"
+vm_cores_per_socket: 1
+
+# CyberCloud Environment
+vdc_name: "{{ target_vdc | default('Ceph-Management-Cluster') }}"
+vapp_name: "{{ vm_name }}-vapp"
+network_name: "{{ target_network | default('CephLAN') }}"
+network_adapter_type: "VMXNET3"
+network_ip_allocation_mode: "DHCP"
+
+# Standard OS Templates
+standard_templates:
+  rhel:
+    template_name: "RHEL8-Template"
+    guest_os: "rhel8_64Guest"
+  ubuntu:
+    template_name: "Ubuntu20-Template"
+    guest_os: "ubuntu64Guest"
+  windows:
+    template_name: "Windows2019-Template"
+    guest_os: "windows9Server64Guest"
+  centos:
+    template_name: "CentOS8-Template"
+    guest_os: "centos8_64Guest"
+  debian:
+    template_name: "Debian11-Template"
+    guest_os: "debian11_64Guest"
+
+# Template selection logic
+vm_template: "{{ custom_template | default(standard_templates[vm_type | default('ubuntu')] | default({'template_name': vm_type + '-Template', 'guest_os': 'otherLinux64Guest'})) }}"

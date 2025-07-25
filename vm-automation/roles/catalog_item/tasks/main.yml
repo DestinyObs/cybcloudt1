@@ -1,0 +1,104 @@
+# CyberCloud Template Verification
+# Check if requested VM template exists
+---
+- name: Verify template availability
+  vcd_catalog_item:
+    catalog_name: "{{ catalog_name | default('Public Catalog') }}"
+    item_name: "{{ vm_template.template_name }}"
+    operation: "read"
+  register: template_check
+  ignore_errors: true
+
+- name: Template verification result
+  debug:
+    msg: "Template {{ vm_template.template_name }} verified"
+  when: template_check is succeeded
+
+- name: Template not found warning
+  debug:
+    msg: "Template {{ vm_template.template_name }} not found in catalog"
+  when: template_check is failed
+
+
+############################################ upload-ova ##############################################################
+- name: upload ova
+  vcd_catalog_item:
+    user: 'XXXXXXXXXX'
+    org: 'XXXXXXXXXX'
+    password: 'XXXXXXXXXX'
+    host: 'XXXXXXXXXX'
+    catalog_name: "{{ catalog_name }}"
+    item_name: "{{ ova_item_name }}"
+    file_name : "{{ ova_file_name }}"
+    chunk_size: "{{ chunk_size }}"
+    state: "present"
+  register: output
+
+- name: upload ova output
+  debug:
+    msg: '{{ output }}'
+
+############################################ delete-ova ##############################################################
+- name: delete ova
+  vcd_catalog_item:
+    catalog_name: "{{ catalog_name }}"
+    item_name: "{{ ova_item_name }}"
+    state: "absent"
+  register: output
+
+- name: delete ova output
+  debug:
+    msg: '{{ output }}'
+
+############################################ capture-vapp ##############################################################
+- name: capture vapp
+  vcd_catalog_item:
+    user: 'XXXXXXXXXX'
+    org: 'XXXXXXXXXX'
+    password: 'XXXXXXXXXX'
+    host: 'XXXXXXXXXX'
+    catalog_name: "{{ catalog_name }}"
+    item_name: "{{ capture_vapp_item_name }}"
+    vapp_name: "{{ vapp_name }}"
+    vdc_name: "{{ vdc_name }}"
+    description: "{{ description }}"
+    customize_on_instantiate: "{{ customize_on_instantiate }}"
+    overwrite: "{{ overwrite }}"
+    operation: "capturevapp"
+  register: output
+
+- name: capture vapp output
+  debug:
+    msg: '{{ output }}'
+
+############################################ delete-capture-vapp ##############################################################
+- name: delete capture-vapp
+  vcd_catalog_item:
+    user: 'XXXXXXXXXX'
+    org: 'XXXXXXXXXX'
+    password: 'XXXXXXXXXX'
+    host: 'XXXXXXXXXX'
+    catalog_name: "{{ catalog_name }}"
+    item_name: "{{ capture_vapp_item_name }}"
+    state: "absent"
+  register: output
+
+- name: delete capture-vapp output
+  debug:
+    msg: '{{ output }}'
+
+############################################ list-vms ##############################################################
+- name: list catalog item vms
+  vcd_catalog_item:
+    user: 'XXXXXXXXXX'
+    org: 'XXXXXXXXXX'
+    password: 'XXXXXXXXXX'
+    host: 'XXXXXXXXXX'
+    catalog_name: "{{ catalog_name }}"
+    item_name: "{{ capture_vapp_item_name }}"
+    operation: "list_vms"
+  register: output
+
+- name: list catalog item vms output
+  debug:
+    msg: '{{ output }}'

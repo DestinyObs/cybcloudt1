@@ -1,141 +1,99 @@
-# CyberCloud VM Automation
+# CyberCloud VM Provisioning Service
+# Customer service interface for VM automation
 
-## Purpose
-Ansible playbook to automate VM creation on CyberCloud platform.
+## Standard OS Support
+- Ubuntu (default: Ubuntu20-Template)
+- Windows (default: Windows2019-Template)  
+- Red Hat Enterprise Linux (default: RHEL8-Template)
+- CentOS (default: CentOS8-Template)
+- Debian (default: Debian11-Template)
 
-## VM Types Supported
-- **rhel** - Red Hat Enterprise Linux 8 (2 CPU, 4GB RAM)
-- **ubuntu** - Ubuntu 20.04 Server (2 CPU, 4GB RAM) 
-- **windows** - Windows Server 2019 (4 CPU, 8GB RAM)
+## Custom OS Support
+For any OS not listed above, the system will attempt to provision using:
+- Template name: {OS_NAME}-Template
+- Generic guest OS type assignment
 
-All VMs use CephLAN network with DHCP for automatic IP assignment.
-
-## Setup
-
-1. Transfer this folder to your RHEL VM (10.10.10.7):
+## Set environment variables for company data and credentials 
 ```bash
-scp -r vm-automation root@10.10.10.7:/root/
+export CYBERCLOUD_USER="your-username"
+export CYBERCLOUD_PASSWORD="your-password"
+export CYBERCLOUD_HOST="your-host"
+export CYBERCLOUD_ORG="your-org"'
+```
+These variables are read automatically by the playbook. No secrets or company info are hardcoded.
+
+## Customer Usage Examples
+
+### Standard VM Requests
+```bash
+# Ubuntu VM (most common)
+ansible-playbook main.yml -e "vm_type=ubuntu cybercloud_password=PASSWORD"
+
+# Windows Server
+ansible-playbook main.yml -e "vm_type=windows cybercloud_password=PASSWORD"
+
+# Red Hat Enterprise Linux
+ansible-playbook main.yml -e "vm_type=rhel cybercloud_password=PASSWORD"
 ```
 
-2. SSH to RHEL VM and setup:
+### Custom VM Specifications
 ```bash
-ssh root@10.10.10.7
-cd vm-automation/scripts
-chmod +x setup.sh
-./setup.sh
+# High-performance VM
+ansible-playbook main.yml -e "
+  vm_type=ubuntu
+  requested_memory=8192
+  requested_cpu=4
+  vm_name=customer-web-server
+  cybercloud_password=PASSWORD
+"
+
+# Custom OS (if template exists)
+ansible-playbook main.yml -e "
+  vm_type=rocky
+  cybercloud_password=PASSWORD
+"
+
+# Specific VDC and network
+ansible-playbook main.yml -e "
+  vm_type=windows
+  target_vdc=Customer-VDC
+  target_network=Customer-Network
+  cybercloud_password=PASSWORD
+"
 ```
 
-## Usage
-
-Create VMs using the playbook:
-
+### Advanced Custom Template
 ```bash
-# Create RHEL VM
-ansible-playbook playbooks/create-vm.yml \
-  -e vm_name=my-rhel-vm \
-  -e vm_type=rhel \
-  -e cybercloud_password=YOUR_PASSWORD
-
-# Create Ubuntu VM  
-ansible-playbook playbooks/create-vm.yml \
-  -e vm_name=my-ubuntu-vm \
-  -e vm_type=ubuntu \
-  -e cybercloud_password=YOUR_PASSWORD
-
-# Create Windows VM
-ansible-playbook playbooks/create-vm.yml \
-  -e vm_name=my-windows-vm \
-  -e vm_type=windows \
-  -e cybercloud_password=YOUR_PASSWORD
+# Use specific template name
+ansible-playbook main.yml -e "
+  custom_template={'template_name': 'Custom-OS-Template', 'guest_os': 'otherLinux64Guest'}
+  vm_name=special-application-server
+  cybercloud_password=PASSWORD
+"
 ```
 
-## Files
-- `playbooks/create-vm.yml` - Main Ansible playbook
-- `scripts/selenium/create_vm.py` - Python script for web automation
-- `scripts/setup.sh` - Setup script for RHEL VM
+## Required Parameters
+- cybercloud_password: CyberCloud account password
 
-That's it. Simple VM creation automation for CyberCloud platform.
+## Optional Parameters
+- vm_type: OS type (ubuntu, windows, rhel, centos, debian, or custom)
+- vm_name: Custom VM name
+- requested_memory: Memory in MB (default: 2048)
+- requested_cpu: Number of CPUs (default: 2)
+- target_vdc: Target VDC (default: Ceph-Management-Cluster)
+- target_network: Target network (default: CephLAN)
+- catalog_name: Source catalog (default: Public Catalog)
 
-### Deploy Application Stack
-```bash
-ansible-playbook playbooks/deploy-gitlab-stack.yml \
-  -e environment=production \
-  -e vm_count=3
-```
+## System Capabilities
+1. Provisions VMs from existing templates
+2. Automatically handles DHCP networking
+3. Powers on VMs after creation
+4. Supports any OS if template exists in catalog
+5. Provides fallback for unknown OS types
+6. Scales across multiple VDCs and networks
 
-### Deploy Multiple VMs
-```bash
-ansible-playbook playbooks/deploy-vm.yml \
-  -e @vars/bulk-deployment.yml
-```
-
-## Features
-
-### Dynamic VM Creation
-- Automated VM provisioning on cloud platform
-- Template-based deployment
-- Resource scaling based on requirements
-
-### Multi-OS Support
-- RHEL 8/9
-- CentOS Stream
-- Ubuntu 20.04/22.04
-- Windows Server 2019/2022
-
-### Application Stacks
-- Web servers (Apache, Nginx)
-- Database servers (MySQL, PostgreSQL)
-- GitLab CE/EE
-- Docker containers
-- Kubernetes clusters
-
-### Cloud Platform Integration
-- VMware vCloud Director
-- OpenStack
-- AWS EC2
-- Azure VMs
-- Google Compute Engine
-
-## Usage Examples
-
-### Example 1: Web Server Farm
-Deploy 3 web servers with load balancer:
-```bash
-ansible-playbook playbooks/deploy-web-server.yml \
-  -e server_count=3 \
-  -e load_balancer=true \
-  -e environment=production
-```
-
-### Example 2: Development Environment
-Deploy complete dev environment:
-```bash
-ansible-playbook playbooks/deploy-dev-environment.yml \
-  -e developer_name=john-doe \
-  -e project_name=webapp-v2
-```
-
-### Example 3: Database Cluster
-Deploy MySQL cluster with replication:
-```bash
-ansible-playbook playbooks/deploy-database.yml \
-  -e db_type=mysql \
-  -e cluster_size=3 \
-  -e replication=true
-```
-
-## Configuration
-
-All deployments are configured through YAML variables:
-- VM specifications
-- Network settings
-- Security configurations
-- Application parameters
-
-## Integration
-
-This automation integrates with:
-- CyberCloud platform APIs
-- Monitoring systems
-- Backup solutions
-- Security scanning tools
+## Prerequisites
+- pyvcloud SDK installed (`pip install -r requirements.txt`)
+- CyberCloud account access
+- Target VDC permissions
+- Network access permissions
