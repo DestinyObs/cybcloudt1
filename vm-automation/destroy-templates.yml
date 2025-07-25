@@ -1,0 +1,33 @@
+---
+- name: Remove VM Templates from vCloud Catalog
+  hosts: localhost
+  tasks:
+    - name: Delete Ubuntu Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "Ubuntu-Template"
+        state: "absent"
+
+    - name: Delete Windows Server 2019 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "Windows2019-Template"
+        state: "absent"
+
+    - name: Delete RHEL 8 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "RHEL8-Template"
+        state: "absent"
+
+    - name: Delete CentOS 8 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "CentOS8-Template"
+        state: "absent"
+
+    - name: Delete Debian 11 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "Debian11-Template"
+        state: "absent"

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+venv/
+ENV/
+
+# Ansible
+*.retry
+
+# Logs
+*.log
+
+# VS Code
+.vscode/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Credentials and secrets
+.env
+*.secret
+# Large template files are tracked with Git LFS

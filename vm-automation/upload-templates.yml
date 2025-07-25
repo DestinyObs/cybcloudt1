@@ -1,0 +1,52 @@
+---
+- name: Upload VM Templates to vCloud Catalog
+  hosts: localhost
+  vars:
+    ansible_python_interpreter: "/venv/vm/bin/python"
+  environment:
+    env_user: "{{ lookup('env', 'CYBERCLOUD_USER') }}"
+    env_password: "{{ lookup('env', 'CYBERCLOUD_PASSWORD') }}"
+    env_host: "{{ lookup('env', 'CYBERCLOUD_HOST') }}"
+    env_org: "{{ lookup('env', 'CYBERCLOUD_ORG') }}"
+    env_api_version: 30.0
+    env_verify_ssl_certs: true
+  tasks:
+    - name: Upload Ubuntu Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "Ubuntu-Template"
+        file_name: "{{ playbook_dir }}/templates/Ubuntu.ova"
+        chunk_size: 104857600
+        state: "present"
+
+    - name: Upload Windows Server 2022 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "Windows2019-Template"
+        file_name: "{{ playbook_dir }}/templates/Windows2022.ova"
+        chunk_size: 104857600
+        state: "present"
+
+    - name: Upload RHEL 8 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "RHEL8-Template"
+        file_name: "{{ playbook_dir }}/templates/RHEL8.ova"
+        chunk_size: 104857600
+        state: "present"
+
+    - name: Upload CentOS 8 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "CentOS8-Template"
+        file_name: "{{ playbook_dir }}/templates/CentOS8.ova"
+        chunk_size: 104857600
+        state: "present"
+
+    - name: Upload Debian 11 Template
+      vcd_catalog_item:
+        catalog_name: "Public Catalog"
+        item_name: "Debian11-Template"
+        file_name: "{{ playbook_dir }}/templates/Debian11.ova"
+        chunk_size: 104857600
+        state: "present"
