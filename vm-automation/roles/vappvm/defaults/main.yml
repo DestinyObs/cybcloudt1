@@ -21,7 +21,7 @@ standard_templates:
     template_name: "RHEL8-Template"
     guest_os: "rhel8_64Guest"
   ubuntu:
-    template_name: "Ubuntu20-Template"
+    template_name: "Ubuntu-Template"
     guest_os: "ubuntu64Guest"
   windows:
     template_name: "Windows2019-Template"
