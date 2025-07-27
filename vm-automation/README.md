@@ -111,8 +111,7 @@ Run these commands to set up Python and a virtual environment:
 
 ```bash
 # Install Python 3 and pip (if not already installed)
-sudo apt update
-sudo apt install python3 python3-pip python3-venv -y
+sudo dnf install python3 python3-pip python3-virtualenv -y
 
 # Create and activate a virtual environment
 python3 -m venv venv/vm
