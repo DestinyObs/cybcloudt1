@@ -20,6 +20,13 @@ export CYBERCLOUD_PASSWORD="your-password"
 export CYBERCLOUD_HOST="your-host"
 export CYBERCLOUD_ORG="your-org"'
 ```
+
+```bash
+export CYBERCLOUD_USER=""
+export CYBERCLOUD_PASSWORD=""
+export CYBERCLOUD_HOST="portal.cybercloud.net.ng/tenant/ceph-Management-Cluster/vdcs"
+export CYBERCLOUD_ORG="ceph-Management-Cluster"
+```
 These variables are read automatically by the playbook. No secrets or company info are hardcoded.
 
 ## Customer Usage Examples
@@ -97,3 +104,20 @@ ansible-playbook main.yml -e "
 - CyberCloud account access
 - Target VDC permissions
 - Network access permissions
+
+## Python Environment Setup
+
+Run these commands to set up Python and a virtual environment:
+
+```bash
+# Install Python 3 and pip (if not already installed)
+sudo apt update
+sudo apt install python3 python3-pip python3-venv -y
+
+# Create and activate a virtual environment
+python3 -m venv venv/vm
+source venv/vm/bin/activate
+
+# Install required Python packages
+pip install -r requirements.txt
+```
